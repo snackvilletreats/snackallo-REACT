@@ -1,64 +1,83 @@
-require('dotenv').config();
 const express = require('express');
-const Razorpay = require('razorpay');
 const cors = require('cors');
-const bodyParser = require('body-parser');
-
 const app = express();
-app.use(cors());
-app.use(bodyParser.json());
 
-// Initialize Razorpay instance
-const razorpay = new Razorpay({
-  key_id: process.env.RAZORPAY_KEY_ID,
-  key_secret: process.env.RAZORPAY_KEY_SECRET,
-});
+app.use(cors()); // Allow cross-origin requests from frontend
+app.use(express.json()); // Parse JSON bodies
 
-// Dummy product data
-const products = [
-  { id: 1, name: 'Banana Chips', price: 10000 }, // price in paise (₹100)
-  { id: 2, name: 'Mixture', price: 8000 },       // ₹80
-  { id: 3, name: 'Achappam', price: 12000 }      // ₹120
-];
+const PORT = process.env.PORT || 10000;
 
-// Get all products
-app.get('/api/products', (req, res) => {
-  res.json(products);
-});
+// In-memory storage for mock orders
+const orders = new Map();
 
-// Create Razorpay order
-app.post('/api/create-order', async (req, res) => {
-  try {
-    const { amount, currency = 'INR', receipt } = req.body;
+/**
+ * POST /create-order
+ * Expects JSON body: { amount: number (in smallest currency unit), currency: string }
+ * Returns a mock order object with id, amount, and currency
+ */
+app.post('/create-order', (req, res) => {
+  const { amount, currency } = req.body;
 
-    if (!amount || !receipt) {
-      return res.status(400).json({ error: 'Amount and receipt are required' });
-    }
-
-    const options = {
-      amount: amount, // in paise
-      currency,
-      receipt,
-      payment_capture: 1,
-    };
-
-    const order = await razorpay.orders.create(options);
-
-    res.json(order);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Failed to create order' });
+  if (!amount || !currency) {
+    return res.status(400).json({ error: 'Amount and currency are required' });
   }
+
+  // Generate a mock order id
+  const mockOrderId = 'order_' + Math.random().toString(36).substring(2, 15);
+
+  // Create mock order object
+  const order = {
+    id: mockOrderId,
+    amount,
+    currency,
+    status: 'created',
+  };
+
+  // Save order in memory
+  orders.set(mockOrderId, order);
+
+  // Respond with mock order details
+  res.json({
+    id: mockOrderId,
+    amount,
+    currency,
+  });
 });
 
-// Webhook for payment verification (optional)
-app.post('/api/payment-verification', (req, res) => {
-  // Verify signature here using Razorpay's recommended method
-  // For now, just send 200 OK
-  res.status(200).json({ status: 'success' });
+/**
+ * POST /verify-payment
+ * Expects JSON body: { order_id: string, payment_id: string, signature: string }
+ * Simulates verification of payment and returns success response
+ */
+app.post('/verify-payment', (req, res) => {
+  const { order_id, payment_id, signature } = req.body;
+
+  if (!order_id || !payment_id || !signature) {
+    return res.status(400).json({ error: 'Missing payment verification details' });
+  }
+
+  const order = orders.get(order_id);
+  if (!order) {
+    return res.status(404).json({ error: 'Order not found' });
+  }
+
+  // Simulate payment verification success
+  order.status = 'paid';
+
+  res.json({
+    status: 'success',
+    message: 'Payment verified successfully (mock)',
+    order_id,
+    payment_id,
+  });
 });
 
-const PORT = process.env.PORT || 5000;
+// Optional health check route
+app.get('/', (req, res) => {
+  res.send('Mock Razorpay Payment Backend is running');
+});
+
+// Start server
 app.listen(PORT, () => {
-  console.log(`Server started on port ${PORT}`);
+  console.log(`Server running on port ${PORT}`);
 });
