@@ -1,18 +1,36 @@
-import React from 'react';
-import ProductCard from './ProductCard';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 
-const products = [
-  { id: 1, name: 'Banana Chips', price: 100, image: '/banana-chips.jpg' },
-  { id: 2, name: 'Mixture', price: 80, image: '/mixture.jpg' },
-  { id: 3, name: 'Achappam', price: 120, image: '/achappam.jpg' },
-];
+const Shop = () => {
+  const [products, setProducts] = useState([]);
 
-export default function Shop({ addToCart }) {
+  useEffect(() => {
+    axios.get(`${process.env.REACT_APP_API_BASE_URL}/products`)
+      .then(response => setProducts(response.data))
+      .catch(err => console.error('Error fetching products:', err));
+  }, []);
+
+  const addToCart = (productId) => {
+    axios.post(`${process.env.REACT_APP_API_BASE_URL}/cart`, { productId, quantity: 1 })
+      .then(() => alert('Item added to cart!'))
+      .catch(err => alert('Error adding to cart.'));
+  };
+
   return (
-    <div className="product-list">
-      {products.map(p => (
-        <ProductCard key={p.id} product={p} addToCart={addToCart} />
-      ))}
+    <div className="shop-container">
+      <h2>Shop</h2>
+      <div className="product-list">
+        {products.map(item => (
+          <div key={item.id} className="product-card">
+            <img src={item.image} alt={item.name} />
+            <h3>{item.name}</h3>
+            <p>₹{item.price}</p>
+            <button onClick={() => addToCart(item.id)}>Add to Cart</button>
+          </div>
+        ))}
+      </div>
     </div>
   );
-}
+};
+
+export default Shop;
