@@ -85,14 +85,6 @@ function App() {
     }
   };
 
- import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Home from './pages/Home';
-import Shop from './pages/Shop';
-import Cart from './pages/Cart';
-import AboutUs from './pages/AboutUs';
-import Contact from './pages/Contact';
-import FAQ from './pages/FAQ';
-import Navbar from './components/Navbar';
 
 function App() {
   return (
