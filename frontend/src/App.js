@@ -54,11 +54,11 @@ function App() {
 
     try {
       const response = await axios.post('https://your-backend-url.com/create-order', {
-        amount: total * 100, // Razorpay expects amount in paisa
+        amount: total * 100, // in paisa
       });
 
       const options = {
-        key: "rzp_test_xxxxxx", // Replace with your Razorpay test key
+        key: "rzp_test_xxxxxx",
         amount: response.data.amount,
         currency: "INR",
         name: "Snackallo",
@@ -85,16 +85,21 @@ function App() {
     }
   };
 
-
-function App() {
   return (
     <Router>
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/shop" element={<Shop />} />
-        <Route path="/cart" element={<Cart />} />
-        <Route path="/about" element={<AboutUs />} />
+        <Route path="/shop" element={<Shop addToCart={addToCart} />} />
+        <Route path="/cart" element={
+          <Cart 
+            cart={cart}
+            updateQuantity={updateQuantity}
+            removeFromCart={removeFromCart}
+            handleCheckout={handleCheckout}
+          />} 
+        />
+        <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/faq" element={<FAQ />} />
       </Routes>
