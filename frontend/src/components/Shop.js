@@ -1,31 +1,39 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+// src/pages/Shop.js
 
-const Shop = () => {
-  const [products, setProducts] = useState([]);
+import React from 'react';
 
-  useEffect(() => {
-    axios.get(`${process.env.REACT_APP_API_BASE_URL}/products`)
-      .then(response => setProducts(response.data))
-      .catch(err => console.error('Error fetching products:', err));
-  }, []);
+const products = [
+  {
+    id: 1,
+    name: 'Banana Chips',
+    price: 100,
+    image: '/images/banana-chips.jpg', // Place image in public/images/
+  },
+  {
+    id: 2,
+    name: 'Achappam',
+    price: 120,
+    image: '/images/achappam.jpg',
+  },
+  {
+    id: 3,
+    name: 'Mixture',
+    price: 90,
+    image: '/images/mixture.jpg',
+  },
+];
 
-  const addToCart = (productId) => {
-    axios.post(`${process.env.REACT_APP_API_BASE_URL}/cart`, { productId, quantity: 1 })
-      .then(() => alert('Item added to cart!'))
-      .catch(err => alert('Error adding to cart.'));
-  };
-
+const Shop = ({ addToCart }) => {
   return (
-    <div className="shop-container">
-      <h2>Shop</h2>
-      <div className="product-list">
-        {products.map(item => (
-          <div key={item.id} className="product-card">
-            <img src={item.image} alt={item.name} />
-            <h3>{item.name}</h3>
-            <p>₹{item.price}</p>
-            <button onClick={() => addToCart(item.id)}>Add to Cart</button>
+    <div className="shop">
+      <h2>Shop Our Snacks</h2>
+      <div className="products">
+        {products.map((product) => (
+          <div key={product.id} className="product-card">
+            <img src={product.image} alt={product.name} width="150" height="150" />
+            <h3>{product.name}</h3>
+            <p>₹{product.price}</p>
+            <button onClick={() => addToCart(product)}>Add to Cart</button>
           </div>
         ))}
       </div>
