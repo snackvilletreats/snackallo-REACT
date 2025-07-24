@@ -1,5 +1,12 @@
 import React from 'react';
-function About() {
-  return <div style={{ padding: 20 }}><h2>About Snackallo</h2><p>We deliver tasty banana chips and traditional snacks.</p></div>;
+
+function AboutUs() {
+  return (
+    <div>
+      <h2>About Us</h2>
+      <p>Snackallo brings you premium banana chips and snacks made with love in Kerala.</p>
+    </div>
+  );
 }
-export default About;
+
+export default AboutUs;
