@@ -1,16 +1,16 @@
-import React from 'react';
+import { Link } from 'react-router-dom';
 
-export default function Navbar({ cartCount, onNavigate }) {
+function Navbar() {
   return (
-    <header>
-      <h1>Snackallo</h1>
-      <nav>
-        {['home','shop','cart'].map(v => (
-          <button key={v} onClick={() => onNavigate(v)}>
-            {v.charAt(0).toUpperCase() + v.slice(1)} {v === 'cart' && `(${cartCount})`}
-          </button>
-        ))}
-      </nav>
-    </header>
+    <nav>
+      <Link to="/">Home</Link>
+      <Link to="/shop">Shop</Link>
+      <Link to="/cart">Cart</Link>
+      <Link to="/about">About Us</Link>
+      <Link to="/faq">FAQ</Link>
+      <Link to="/contact">Contact</Link>
+    </nav>
   );
 }
+
+export default Navbar;
