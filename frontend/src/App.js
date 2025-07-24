@@ -1,28 +1,32 @@
-import React, { useState } from 'react';
-import Navbar from './components/Navbar';
-import Home from './components/Home';
-import Shop from './components/Shop';
-import Cart from './components/Cart';
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import Home from './pages/Home';
+import About from './pages/About';
+import Shop from './pages/Shop';
+import Cart from './pages/Cart';
+import Contact from './pages/Contact';
+import FAQ from './pages/FAQ';
 
 function App() {
-  const [view, setView] = useState('home');
-  const [cart, setCart] = useState([]);
-
-  const addToCart = (product) => setCart([...cart, product]);
-  const removeFromCart = (idx) => setCart(cart.filter((_, i) => i !== idx));
-  const clearCart = () => setCart([]);
-
   return (
-    <>
-      <Navbar cartCount={cart.length} onNavigate={setView} />
-      {view === 'home' && <Home />}
-      {view === 'shop' && <Shop addToCart={addToCart} />}
-      {view === 'cart' && <Cart
-        cart={cart}
-        removeFromCart={removeFromCart}
-        clearCart={clearCart}
-      />}
-    </>
+    <Router>
+      <nav style={{ padding: 20, backgroundColor: '#ffeeba' }}>
+        <Link to="/" style={{ marginRight: 10 }}>Home</Link>
+        <Link to="/about" style={{ marginRight: 10 }}>About Us</Link>
+        <Link to="/shop" style={{ marginRight: 10 }}>Shop</Link>
+        <Link to="/cart" style={{ marginRight: 10 }}>Cart</Link>
+        <Link to="/contact" style={{ marginRight: 10 }}>Contact</Link>
+        <Link to="/faq">FAQ</Link>
+      </nav>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/shop" element={<Shop />} />
+        <Route path="/cart" element={<Cart />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/faq" element={<FAQ />} />
+      </Routes>
+    </Router>
   );
 }
 
