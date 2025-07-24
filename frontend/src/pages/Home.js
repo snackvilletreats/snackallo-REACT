@@ -1,5 +1,13 @@
 import React from 'react';
+
 function Home() {
-  return <div style={{ padding: 20 }}><h2>Welcome to Snackallo!</h2></div>;
+  return (
+    <div>
+      <h1>Welcome to Snackallo!</h1>
+      <img src="/images/banana-chips.jpg" alt="Banana Chips" width="300" />
+      <p>We bring you the tastiest banana chips and snacks, straight from Kerala to your doorstep.</p>
+    </div>
+  );
 }
+
 export default Home;
