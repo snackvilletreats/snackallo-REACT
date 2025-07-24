@@ -85,24 +85,24 @@ function App() {
     }
   };
 
+ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Home from './pages/Home';
+import Shop from './pages/Shop';
+import Cart from './pages/Cart';
+import AboutUs from './pages/AboutUs';
+import Contact from './pages/Contact';
+import FAQ from './pages/FAQ';
+import Navbar from './components/Navbar';
+
+function App() {
   return (
     <Router>
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/shop" element={<Shop addToCart={addToCart} />} />
-        <Route
-          path="/cart"
-          element={
-            <Cart
-              cart={cart}
-              updateQuantity={updateQuantity}
-              removeFromCart={removeFromCart}
-              handleCheckout={handleCheckout}
-            />
-          }
-        />
-        <Route path="/about" element={<About />} />
+        <Route path="/shop" element={<Shop />} />
+        <Route path="/cart" element={<Cart />} />
+        <Route path="/about" element={<AboutUs />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/faq" element={<FAQ />} />
       </Routes>
